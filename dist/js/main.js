@@ -10486,6 +10486,7 @@ var App = (function () {
         this.primaryButton.click(function (e) { return _this.onPrimaryClick(e); });
         this.secondaryButton.click(function (e) { return _this.onSecondaryClick(e); });
         $('.body').click(function (e) { return _this.onPrimaryClick(e); });
+        $('body').on('touchmove', function (e) { return e.preventDefault(); });
     };
     // Render UI based on state
     App.prototype.render = function () {

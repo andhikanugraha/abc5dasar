@@ -23,6 +23,7 @@ export default class App {
         this.primaryButton.click(e => this.onPrimaryClick(e));
         this.secondaryButton.click(e => this.onSecondaryClick(e));
         $('.body').click(e => this.onPrimaryClick(e));
+        $('body').on('touchmove', e => e.preventDefault());
     }
 
     // Render UI based on state
