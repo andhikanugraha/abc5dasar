@@ -1,0 +1,36 @@
+{
+  "name": "abc5dasar",
+  "description": "Random letter generator to play ABC 5 Dasar.",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "devDependencies": {
+    "@types/jquery": "^2.0.41",
+    "bootstrap": "4.0.0-alpha.6",
+    "browserify": "^14.3.0",
+    "gulp": "^3.9.1",
+    "gulp-sass": "^3.1.0",
+    "jquery": "^3.2.1",
+    "serve": "^5.1.4",
+    "tsify": "^3.0.1",
+    "tslib": "^1.6.0",
+    "typescript": "^2.2.2",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andhikanugraha/abc5dasar.git"
+  },
+  "keywords": [
+    "abc5dasar"
+  ],
+  "author": "Andhika Nugraha (andhika.nugraha@outlook.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andhikanugraha/abc5dasar/issues"
+  },
+  "homepage": "https://andhikanugraha.github.io/abc5dasar/"
+}

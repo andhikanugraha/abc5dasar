@@ -1,0 +1,60 @@
+@import 'node_modules/bootstrap/scss/bootstrap-reboot';
+@import 'node_modules/bootstrap/scss/_type';
+@import 'node_modules/bootstrap/scss/_buttons';
+
+$border-color: lighten($gray-light, 30%);
+$box-bg-color: $gray-lighter;
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.wrapper {
+    display: flex;
+    height: 100%;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    padding: 1em .5em;
+    background: $box-bg-color;
+    text-align: center;
+    border-bottom: 1px solid $border-color;
+}
+
+.body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .current-letter {
+        font-size: 20em;
+        font-size: 90vmin;
+        line-height: 15px;
+        vertical-align: middle;
+        font-weight: $display1-weight;
+        @media (orientation: landscape) {
+            font-size: 40vmin;
+        }
+        &.countdown {
+            color: $teal;
+        }
+    }
+}
+
+.controls {
+    border-top: 1px solid $border-color;
+    width: 100%;
+    background: $box-bg-color;
+    p {
+        margin: .5em;
+    }
+    .restart {
+        display: none;
+    }
+}

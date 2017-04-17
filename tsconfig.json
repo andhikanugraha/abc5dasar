@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "lib": [
+            "dom",
+            "es2015.promise",
+            "es5"
+        ],
+        "importHelpers": true,
+        "sourceMap": true
+    },
+    "compileOnSave": true,
+    "include": [
+        "src/**/*"
+    ]
+}
