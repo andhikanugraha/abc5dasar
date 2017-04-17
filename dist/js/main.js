@@ -10586,7 +10586,6 @@ var App = (function () {
         this.render();
     };
     App.prototype.tickCountdown = function () {
-        console.log('Tick ' + Math.floor(Date.now() / 1000));
         if (this.intervalLap) {
             this.intervalLap = false;
             this.render();

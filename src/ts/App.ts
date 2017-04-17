@@ -121,8 +121,6 @@ export default class App {
     }
 
     tickCountdown(): void {
-        console.log('Tick ' + Math.floor(Date.now() / 1000));
-
         if (this.intervalLap) {
             this.intervalLap = false;
             this.render();
