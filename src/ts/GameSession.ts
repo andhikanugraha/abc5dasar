@@ -1,4 +1,4 @@
-const latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+export const latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 // Data model for a game session
 export default class GameSession {
@@ -7,6 +7,14 @@ export default class GameSession {
 
     constructor() {
         this.shuffledLetters = this.generateShuffledAlphabet();
+    }
+
+    getHumanFriendlyTurnNumber(): number {
+        if (this.turnNumber < this.shuffledLetters.length) {
+            return this.turnNumber + 1;
+        }
+        
+        return 0;
     }
 
     nextTurn(): void {
@@ -28,6 +36,26 @@ export default class GameSession {
         else { // we've ran out of letters
             return undefined;
         }
+    }
+
+    getPreviousLetters(): string[] {
+        const previousLetters: string[] = [];
+
+        for (let i = 0; (i < this.turnNumber) && (i < this.shuffledLetters.length); ++i) {
+            previousLetters.push(this.shuffledLetters[i]);
+        }
+
+        return previousLetters;
+    }
+
+    getUpcomingLetters(): string[] {
+        const upcomingLetters: string[] = [];
+
+        for (let i = this.turnNumber; i < this.shuffledLetters.length - 1; ++i) {
+            upcomingLetters.push(this.shuffledLetters[i]);
+        }
+
+        return upcomingLetters;
     }
 
     private generateShuffledAlphabet(): string {

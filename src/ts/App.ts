@@ -1,5 +1,10 @@
 import * as $ from 'jquery';
 import GameSession from './GameSession';
+import {latinAlphabet} from './GameSession';
+
+interface LetterElementMap {
+    [prop: string]: JQuery;
+}
 
 export default class App {
     currentGame: GameSession;
@@ -11,9 +16,14 @@ export default class App {
     primaryButton: JQuery = $('#nextTurnButton');
     secondaryButton: JQuery = $('#restartButton');
     currentLetter: JQuery = $('#currentLetter');
+    alphabetDisplay: JQuery = $('#alphabetDisplay');
+    pageTitle: JQuery = $('#pageTitle');
+
+    letterElements: LetterElementMap = {};
 
     constructor() {
         this.bindEvents();
+        this.initAlphabetElements();
         this.interval = setInterval(() => this.tickCountdown(), 1000);
         this.render();
     }
@@ -26,10 +36,20 @@ export default class App {
         $('body').on('touchmove', e => e.preventDefault());
     }
 
+    initAlphabetElements() {
+        for (let i = 0; i < latinAlphabet.length; ++i) {
+            let letter = latinAlphabet[i];
+            let element = $(`#letter${letter}`);
+            this.letterElements[letter] = element;
+        }
+    }
+
     // Render UI based on state
     render() {
         // No game started
         if (!this.currentGame) {
+            this.pageTitle.text('ABC 5 Dasar');
+
             this.primaryButton.text('Start');
             this.primaryButton.removeClass('disabled');
             this.primaryButton.parent().slideDown();
@@ -38,11 +58,16 @@ export default class App {
             this.secondaryButton.parent().slideUp();
 
             this.currentLetter.text('');
+
+            this.alphabetDisplay.parent().slideUp();
         }
 
         else {
             // Show current letter (or countdown) if not yet finished
             if (!this.currentGame.isFinished()) {
+                this.alphabetDisplay.parent().slideDown();
+                this.pageTitle.text(`Round ${this.currentGame.getHumanFriendlyTurnNumber()}`);
+
                 // Display the countdown or current letter
                 if (this.countdown) {
                     this.primaryButton.addClass('disabled');
@@ -54,11 +79,17 @@ export default class App {
                     else {
                         this.currentLetter.text(this.countdown);
                     }
+
+                    // Show previous letters excluding current one
+                    this.renderAlphabet();
                 }
                 else {
                     this.primaryButton.removeClass('disabled');
                     this.currentLetter.text(this.currentGame.getCurrentLetter());
                     this.currentLetter.removeClass('countdown');
+
+                    // Show previous letters + current one
+                    this.renderAlphabet(true);
                 }
             }
             
@@ -74,6 +105,27 @@ export default class App {
                 this.primaryButton.parent().slideUp();
                 this.secondaryButton.parent().show();
                 this.secondaryButton.addClass('btn-lg');
+            }
+        }
+    }
+
+    renderAlphabet(includeCurrentLetter: boolean = false): void {
+        console.log(this.letterElements);
+        let usedLetters: any = {};
+        this.currentGame.getPreviousLetters().forEach(letter => {
+            usedLetters[letter] = true;
+        });
+
+        for (let i = 0; i < latinAlphabet.length; ++i) {
+            let letter = latinAlphabet[i];
+            if (usedLetters[letter]) {
+                this.letterElements[letter].removeClass('current').addClass('used');
+            }
+            else if (includeCurrentLetter && this.currentGame.getCurrentLetter() === letter) {
+                this.letterElements[letter].addClass('current').removeClass('used');
+            }
+            else {
+                this.letterElements[letter].removeClass('used current');
             }
         }
     }

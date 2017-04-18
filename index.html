@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="format-detection" content="telephone=no">
 
   <title>ABC 5 Dasar</title>
 
@@ -16,14 +15,46 @@
 <body>
   <div class="wrapper">
     <header>
-      <h3>ABC 5 Dasar</h3>
+      <h3 id="pageTitle">ABC 5 Dasar</h3>
     </header>
     <div class="body">
-      <div class="current-letter" id="currentLetter"></div>
+      <div class="current-letter">
+        <span id="currentLetter"></span>
+      </div>
+      <div class="alphabet">
+        <p id="alphabetDisplay">
+          <span id="letterA">A</span>
+          <span id="letterB">B</span>
+          <span id="letterC">C</span>
+          <span id="letterD">D</span>
+          <span id="letterE">E</span>
+          <span id="letterF">F</span>
+          <span id="letterG">G</span>
+          <span id="letterH">H</span>
+          <span id="letterI">I</span>
+          <span id="letterJ">J</span>
+          <span id="letterK">K</span>
+          <span id="letterL">L</span>
+          <span id="letterM">M</span>
+          <span id="letterN">N</span>
+          <span id="letterO">O</span>
+          <span id="letterP">P</span>
+          <span id="letterQ">Q</span>
+          <span id="letterR">R</span>
+          <span id="letterS">S</span>
+          <span id="letterT">T</span>
+          <span id="letterU">U</span>
+          <span id="letterV">V</span>
+          <span id="letterW">W</span>
+          <span id="letterX">X</span>
+          <span id="letterY">Y</span>
+          <span id="letterZ">Z</span>
+        </p>
+      </div>
     </div>
     <div class="controls">
       <p class="next-turn">
-        <a href="#" class="btn btn-block btn-success btn-lg" id="nextTurnButton">Start</a>
+        <a href="#" class="btn btn-block btn-primary btn-lg" id="nextTurnButton">Start</a>
       </p>
       <p class="restart">
         <a href="#" class="btn btn-block btn-danger" id="restartButton">Restart</a>

@@ -10468,6 +10468,7 @@ exports.__esModule = true;
 var tslib_1 = require("tslib");
 var $ = require("jquery");
 var GameSession_1 = require("./GameSession");
+var GameSession_2 = require("./GameSession");
 var App = (function () {
     function App() {
         var _this = this;
@@ -10476,7 +10477,11 @@ var App = (function () {
         this.primaryButton = $('#nextTurnButton');
         this.secondaryButton = $('#restartButton');
         this.currentLetter = $('#currentLetter');
+        this.alphabetDisplay = $('#alphabetDisplay');
+        this.pageTitle = $('#pageTitle');
+        this.letterElements = {};
         this.bindEvents();
+        this.initAlphabetElements();
         this.interval = setInterval(function () { return _this.tickCountdown(); }, 1000);
         this.render();
     }
@@ -10488,20 +10493,31 @@ var App = (function () {
         $('.body').click(function (e) { return _this.onPrimaryClick(e); });
         $('body').on('touchmove', function (e) { return e.preventDefault(); });
     };
+    App.prototype.initAlphabetElements = function () {
+        for (var i = 0; i < GameSession_2.latinAlphabet.length; ++i) {
+            var letter = GameSession_2.latinAlphabet[i];
+            var element = $("#letter" + letter);
+            this.letterElements[letter] = element;
+        }
+    };
     // Render UI based on state
     App.prototype.render = function () {
         // No game started
         if (!this.currentGame) {
+            this.pageTitle.text('ABC 5 Dasar');
             this.primaryButton.text('Start');
             this.primaryButton.removeClass('disabled');
             this.primaryButton.parent().slideDown();
             this.secondaryButton.removeClass('btn-lg');
             this.secondaryButton.parent().slideUp();
             this.currentLetter.text('');
+            this.alphabetDisplay.parent().slideUp();
         }
         else {
             // Show current letter (or countdown) if not yet finished
             if (!this.currentGame.isFinished()) {
+                this.alphabetDisplay.parent().slideDown();
+                this.pageTitle.text("Round " + this.currentGame.getHumanFriendlyTurnNumber());
                 // Display the countdown or current letter
                 if (this.countdown) {
                     this.primaryButton.addClass('disabled');
@@ -10512,11 +10528,15 @@ var App = (function () {
                     else {
                         this.currentLetter.text(this.countdown);
                     }
+                    // Show previous letters excluding current one
+                    this.renderAlphabet();
                 }
                 else {
                     this.primaryButton.removeClass('disabled');
                     this.currentLetter.text(this.currentGame.getCurrentLetter());
                     this.currentLetter.removeClass('countdown');
+                    // Show previous letters + current one
+                    this.renderAlphabet(true);
                 }
             }
             // Show next letter button if not the last turn, else only restart button
@@ -10530,6 +10550,26 @@ var App = (function () {
                 this.primaryButton.parent().slideUp();
                 this.secondaryButton.parent().show();
                 this.secondaryButton.addClass('btn-lg');
+            }
+        }
+    };
+    App.prototype.renderAlphabet = function (includeCurrentLetter) {
+        if (includeCurrentLetter === void 0) { includeCurrentLetter = false; }
+        console.log(this.letterElements);
+        var usedLetters = {};
+        this.currentGame.getPreviousLetters().forEach(function (letter) {
+            usedLetters[letter] = true;
+        });
+        for (var i = 0; i < GameSession_2.latinAlphabet.length; ++i) {
+            var letter = GameSession_2.latinAlphabet[i];
+            if (usedLetters[letter]) {
+                this.letterElements[letter].removeClass('current').addClass('used');
+            }
+            else if (includeCurrentLetter && this.currentGame.getCurrentLetter() === letter) {
+                this.letterElements[letter].addClass('current').removeClass('used');
+            }
+            else {
+                this.letterElements[letter].removeClass('used current');
             }
         }
     };
@@ -10604,13 +10644,19 @@ exports["default"] = App;
 },{"./GameSession":4,"jquery":1,"tslib":2}],4:[function(require,module,exports){
 "use strict";
 exports.__esModule = true;
-var latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+exports.latinAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 // Data model for a game session
 var GameSession = (function () {
     function GameSession() {
         this.turnNumber = 0; // starts from 0
         this.shuffledLetters = this.generateShuffledAlphabet();
     }
+    GameSession.prototype.getHumanFriendlyTurnNumber = function () {
+        if (this.turnNumber < this.shuffledLetters.length) {
+            return this.turnNumber + 1;
+        }
+        return 0;
+    };
     GameSession.prototype.nextTurn = function () {
         ++this.turnNumber;
     };
@@ -10628,11 +10674,25 @@ var GameSession = (function () {
             return undefined;
         }
     };
+    GameSession.prototype.getPreviousLetters = function () {
+        var previousLetters = [];
+        for (var i = 0; (i < this.turnNumber) && (i < this.shuffledLetters.length); ++i) {
+            previousLetters.push(this.shuffledLetters[i]);
+        }
+        return previousLetters;
+    };
+    GameSession.prototype.getUpcomingLetters = function () {
+        var upcomingLetters = [];
+        for (var i = this.turnNumber; i < this.shuffledLetters.length - 1; ++i) {
+            upcomingLetters.push(this.shuffledLetters[i]);
+        }
+        return upcomingLetters;
+    };
     GameSession.prototype.generateShuffledAlphabet = function () {
         var arr = [];
         // Convert latinAlphabet into array of chars
-        for (var j = 0; j < latinAlphabet.length; ++j) {
-            arr.push(latinAlphabet[j]);
+        for (var j = 0; j < exports.latinAlphabet.length; ++j) {
+            arr.push(exports.latinAlphabet[j]);
         }
         // Shuffle the array of chars
         for (var i = arr.length; i; i--) {
